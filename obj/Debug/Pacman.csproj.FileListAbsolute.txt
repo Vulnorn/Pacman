@@ -1,0 +1,8 @@
+C:\Users\mixad\source\repos\Pacman\bin\Debug\Pacman.exe.config
+C:\Users\mixad\source\repos\Pacman\bin\Debug\Pacman.exe
+C:\Users\mixad\source\repos\Pacman\bin\Debug\Pacman.pdb
+C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.csproj.AssemblyReference.cache
+C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.csproj.SuggestedBindingRedirects.cache
+C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.csproj.CoreCompileInputs.cache
+C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.exe
+C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.pdb
