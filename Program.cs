@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 
 namespace Pacman
@@ -16,20 +17,24 @@ namespace Pacman
 
             int firstGhostX;
             int firstGhostY;
-            int firstGhostDX = 0;
-            int firstGhostDY = 1;
+            int firstGhostDirectionX = 0;
+            int firstGhostDirectionY = 1;
             int secondGhostX;
             int secondGhostY;
-            int secondGhostDX = 0;
-            int secondGhostDY = -1;
+            int secondGhostDirectionX = 0;
+            int secondGhostDirectionY = -1;
             int pacmanX;
             int pacmanY;
-            int pacmanDX = 0;
-            int pacmanDY = 0;
+            int pacmanDirectionX = 0;
+            int pacmanDirectionY = 0;
             int allDots = 0;
             int collectDots = 0;
-
-            char[,] map = ReadMap("Map1", out pacmanX, out pacmanY, out firstGhostX, out firstGhostY, out secondGhostX, out secondGhostY, ref allDots);
+            char obstacle = '#';
+            char player = '@';
+            char firstOpponent = '$';
+            char secondOpponent = '&';
+            char reward = '.';
+            char[,] map = ReadMap("Map1", out pacmanX, out pacmanY, out firstGhostX, out firstGhostY, out secondGhostX, out secondGhostY, ref allDots, player, firstOpponent, secondOpponent, reward);
 
             DrawMap(map);
 
@@ -43,33 +48,33 @@ namespace Pacman
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
-                    ChangeDirection(key, ref pacmanDX, ref pacmanDY);
+                    ChangeDirection(key, ref pacmanDirectionX, ref pacmanDirectionY);
                 }
 
-                if (map[pacmanX + pacmanDX, pacmanY + pacmanDY] != '#')
+                if (map[pacmanX + pacmanDirectionX, pacmanY + pacmanDirectionY] != obstacle)
                 {
-                    CollectDots(map, pacmanX, pacmanY, ref collectDots);
+                    CollectDots(map, pacmanX, pacmanY, ref collectDots, reward);
 
-                    Move(map, '@', ref pacmanX, ref pacmanY, pacmanDX, pacmanDY);
+                    Move(map, player, ref pacmanX, ref pacmanY, pacmanDirectionX, pacmanDirectionY);
 
                 }
 
-                if (map[firstGhostX + firstGhostDX, firstGhostY + firstGhostDY] != '#')
+                if (map[firstGhostX + firstGhostDirectionX, firstGhostY + firstGhostDirectionY] != obstacle)
                 {
-                    Move(map, '$', ref firstGhostX, ref firstGhostY, firstGhostDX, firstGhostDY);
-                }
-                else
-                {
-                    ChangeDirection(random, ref firstGhostDX, ref firstGhostDY);
-                }
-
-                if (map[secondGhostX + secondGhostDX, secondGhostY + secondGhostDY] != '#')
-                {
-                    Move(map, '&', ref secondGhostX, ref secondGhostY, secondGhostDX, secondGhostDY);
+                    Move(map, firstOpponent, ref firstGhostX, ref firstGhostY, firstGhostDirectionX, firstGhostDirectionY);
                 }
                 else
                 {
-                    ChangeDirection(random, ref secondGhostDX, ref secondGhostDY);
+                    ChangeDirection(random, ref firstGhostDirectionX, ref firstGhostDirectionY);
+                }
+
+                if (map[secondGhostX + secondGhostDirectionX, secondGhostY + secondGhostDirectionY] != obstacle)
+                {
+                    Move(map, secondOpponent, ref secondGhostX, ref secondGhostY, secondGhostDirectionX, secondGhostDirectionY);
+                }
+                else
+                {
+                    ChangeDirection(random, ref secondGhostDirectionX, ref secondGhostDirectionY);
                 }
 
                 if ((firstGhostX == pacmanX && firstGhostY == pacmanY) || (secondGhostX == pacmanX && secondGhostY == pacmanY))
@@ -99,76 +104,76 @@ namespace Pacman
             Console.ReadKey();
         }
 
-        static void Move(char[,] map, char symbol, ref int X, ref int Y, int DX, int DY)
+        static void Move(char[,] map, char symbol, ref int  numberСolumn, ref int numberLine, int directionX, int directionY)
         {
-            Console.SetCursorPosition(Y, X);
-            Console.Write(map[X, Y]);
+            Console.SetCursorPosition(numberLine, numberСolumn);
+            Console.Write(map[numberСolumn, numberLine]);
 
-            X += DX;
-            Y += DY;
+            numberСolumn += directionX;
+            numberLine += directionY;
 
-            Console.SetCursorPosition(Y, X);
+            Console.SetCursorPosition(numberLine, numberСolumn);
             Console.Write(symbol);
         }
 
-        static void CollectDots(char[,] map, int pacmanX, int pacmanY, ref int collectDots)
+        static void CollectDots(char[,] map, int pacmanX, int pacmanY, ref int collectDots,char reward)
         {
-            if (map[pacmanX, pacmanY] == '.')
+            if (map[pacmanX, pacmanY] == reward)
             {
                 collectDots++;
                 map[pacmanX, pacmanY] = ' ';
             }
         }
 
-        static void ChangeDirection(ConsoleKeyInfo key, ref int DX, ref int DY)
+        static void ChangeDirection(ConsoleKeyInfo key, ref int directionX, ref int directionY)
         {
             switch (key.Key)
             {
                 case ConsoleKey.UpArrow:
-                    DX = -1;
-                    DY = 0;
+                    directionX = -1;
+                    directionY = 0;
                     break;
 
                 case ConsoleKey.DownArrow:
-                    DX = 1;
-                    DY = 0;
+                    directionX = 1;
+                    directionY = 0;
                     break;
 
                 case ConsoleKey.LeftArrow:
-                    DX = 0;
-                    DY = -1;
+                    directionX = 0;
+                    directionY = -1;
                     break;
 
                 case ConsoleKey.RightArrow:
-                    DX = 0;
-                    DY = 1;
+                    directionX = 0;
+                    directionY = 1;
                     break;
             }
         }
-        static void ChangeDirection(Random random, ref int DX, ref int DY)
+        static void ChangeDirection(Random random, ref int directionX, ref int directionY)
         {
             int GhostDir = random.Next(1, 5);
 
             switch (GhostDir)
             {
                 case 1:
-                    DX = -1;
-                    DY = 0;
+                    directionX = -1;
+                    directionY = 0;
                     break;
 
                 case 2:
-                    DX = 1;
-                    DY = 0;
+                    directionX = 1;
+                    directionY = 0;
                     break;
 
                 case 3:
-                    DX = 0;
-                    DY = -1;
+                    directionX = 0;
+                    directionY = -1;
                     break;
 
                 case 4:
-                    DX = 0;
-                    DY = 1;
+                    directionX = 0;
+                    directionY = 1;
                     break;
             }
         }
@@ -186,7 +191,7 @@ namespace Pacman
             }
         }
 
-        static char[,] ReadMap(string mapNape, out int pacmanX, out int pacmanY, out int firstGhostX, out int firstGhostY, out int secondGhostX, out int secondGhostY, ref int allDots)
+        static char[,] ReadMap(string mapNape, out int pacmanX, out int pacmanY, out int firstGhostX, out int firstGhostY, out int secondGhostX, out int secondGhostY, ref int allDots, char player, char firstOpponent, char secondOpponent,char reward)
         {
             pacmanX = 0;
             pacmanY = 0;
@@ -204,27 +209,27 @@ namespace Pacman
                 {
                     map[i, j] = newFile[i][j];
 
-                    if ((map[i, j]) == '@')
+                    if ((map[i, j]) == player)
                     {
                         pacmanX = i;
                         pacmanY = j;
-                        map[i, j] = '.';
+                        map[i, j] = reward;
                     }
-                    else if ((map[i, j]) == '$')
+                    else if ((map[i, j]) == firstOpponent)
                     {
                         firstGhostX = i;
                         firstGhostY = j;
-                        map[i, j] = '.';
+                        map[i, j] = reward;
                     }
-                    else if ((map[i, j]) == '&')
+                    else if ((map[i, j]) == secondOpponent)
                     {
                         secondGhostX = i;
                         secondGhostY = j;
-                        map[i, j] = '.';
+                        map[i, j] = reward;
                     }
                     else if (map[i, j] == ' ')
                     {
-                        map[i, j] = '.';
+                        map[i, j] = reward;
                         allDots++;
                     }
                 }
