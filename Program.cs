@@ -84,7 +84,7 @@ namespace Pacman
 
                 System.Threading.Thread.Sleep(150);
 
-                if (collectDots == allDots || !isAlive)
+                if (collectDots == allDots || isAlive==false)
                 {
                     isPlaying = false;
                 }
@@ -96,7 +96,7 @@ namespace Pacman
             {
                 Console.WriteLine("Вы победили!");
             }
-            else if (!isAlive)
+            else if (isAlive==false)
             {
                 Console.WriteLine("Вы проиграли, Вас съели!");
             }
@@ -127,24 +127,29 @@ namespace Pacman
 
         static void ChangeDirection(ConsoleKeyInfo key, ref int directionX, ref int directionY)
         {
+            const ConsoleKey KeyUpArrow = ConsoleKey.UpArrow;
+            const ConsoleKey KeyDownArrow = ConsoleKey.DownArrow;
+            const ConsoleKey KeyLeftArrow = ConsoleKey.LeftArrow;
+            const ConsoleKey KeyRightArrow = ConsoleKey.RightArrow;
+
             switch (key.Key)
             {
-                case ConsoleKey.UpArrow:
+                case KeyUpArrow:
                     directionX = -1;
                     directionY = 0;
                     break;
 
-                case ConsoleKey.DownArrow:
+                case KeyDownArrow:
                     directionX = 1;
                     directionY = 0;
                     break;
 
-                case ConsoleKey.LeftArrow:
+                case KeyLeftArrow:
                     directionX = 0;
                     directionY = -1;
                     break;
 
-                case ConsoleKey.RightArrow:
+                case KeyRightArrow:
                     directionX = 0;
                     directionY = 1;
                     break;
@@ -152,26 +157,34 @@ namespace Pacman
         }
         static void ChangeDirection(Random random, ref int directionX, ref int directionY)
         {
-            int GhostDir = random.Next(1, 5);
+            const int FirstRandomNumber = 1;
+            const int SecondRandomNumber = 2;
+            const int ThirdRandomNumber = 3;
+            const int FourthRandomNumber = 4;
 
+            int leftBorderOfRandom = 1;
+            int rightBorderOfRandom = 5;
+
+            int GhostDir = random.Next(leftBorderOfRandom, rightBorderOfRandom);
+            
             switch (GhostDir)
             {
-                case 1:
+                case FirstRandomNumber:
                     directionX = -1;
                     directionY = 0;
                     break;
 
-                case 2:
+                case SecondRandomNumber:
                     directionX = 1;
                     directionY = 0;
                     break;
 
-                case 3:
+                case ThirdRandomNumber:
                     directionX = 0;
                     directionY = -1;
                     break;
 
-                case 4:
+                case FourthRandomNumber:
                     directionX = 0;
                     directionY = 1;
                     break;
