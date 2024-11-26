@@ -6,3 +6,10 @@ C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.csproj.SuggestedBindingRedir
 C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.csproj.CoreCompileInputs.cache
 C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.exe
 C:\Users\mixad\source\repos\Pacman\obj\Debug\Pacman.pdb
+C:\Users\mixad\GitRepost\Pacman\bin\Debug\Pacman.exe.config
+C:\Users\mixad\GitRepost\Pacman\bin\Debug\Pacman.exe
+C:\Users\mixad\GitRepost\Pacman\bin\Debug\Pacman.pdb
+C:\Users\mixad\GitRepost\Pacman\obj\Debug\Pacman.csproj.AssemblyReference.cache
+C:\Users\mixad\GitRepost\Pacman\obj\Debug\Pacman.csproj.CoreCompileInputs.cache
+C:\Users\mixad\GitRepost\Pacman\obj\Debug\Pacman.exe
+C:\Users\mixad\GitRepost\Pacman\obj\Debug\Pacman.pdb
