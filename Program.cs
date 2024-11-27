@@ -47,12 +47,12 @@ namespace Pacman
                 {
                     ConsoleKeyInfo key = Console.ReadKey(true);
 
-                    ChangeDirection(key, ref pacmanDirectionX, ref pacmanDirectionY);
+                    MovePacman(key, out pacmanDirectionX, out pacmanDirectionY);
                 }
 
                 if (map[pacmanPositionX + pacmanDirectionX, pacmanPositionY + pacmanDirectionY] != obstacle)
                 {
-                    CollectDots(map, pacmanPositionX, pacmanPositionY, ref collectDots, reward);
+                    CollectDots(map, pacmanPositionX, pacmanPositionY, collectDots, reward);
 
                     Move(map, player, ref pacmanPositionX, ref pacmanPositionY, pacmanDirectionX, pacmanDirectionY);
 
@@ -96,7 +96,7 @@ namespace Pacman
             }
             else
             {
-                ChangeDirection(random, ref ghostDirectionX, ref ghostDirectionY);
+                ChangeDirection(random, out ghostDirectionX, out ghostDirectionY);
             }
         }
 
@@ -112,16 +112,18 @@ namespace Pacman
             Console.Write(symbol);
         }
 
-        static void CollectDots(char[,] map, int pacmanPositionX, int pacmanPositionY, ref int collectDots, char reward)
+        static int CollectDots(char[,] map, int pacmanPositionX, int pacmanPositionY, int collectDots, char reward)
         {
             if (map[pacmanPositionX, pacmanPositionY] == reward)
             {
                 collectDots++;
-                map[pacmanPositionX, pacmanPositionY] = ' ';
+                map[pacmanPositionX, pacmanPositionY] = ' ';                
             }
+
+            return collectDots;
         }
 
-        static void ChangeDirection(ConsoleKeyInfo key, ref int directionX, ref int directionY)
+        static void MovePacman(ConsoleKeyInfo key, out int directionX, out int directionY)
         {
             const ConsoleKey MoveUpCommand = ConsoleKey.UpArrow;
             const ConsoleKey MoveDownCommand = ConsoleKey.DownArrow;
@@ -151,40 +153,42 @@ namespace Pacman
             }
         }
 
-        static void ChangeDirection(Random random, ref int directionX, ref int directionY)
+        static void ChangeDirection(Random random, out int directionX, out int directionY)
         {
-            const int FirstRandomNumber = 1;
-            const int SecondRandomNumber = 2;
-            const int ThirdRandomNumber = 3;
-            const int FourthRandomNumber = 4;
+            const int MoveLeftCommand = 1;
+            const int MoveRightCommand = 2;
+            const int MoveDownCommand = 3;
+            const int MoveUpCommand = 4;
 
-            int leftBorderOfRandom = 1;
-            int rightBorderOfRandom = 5;
+            directionX = 0;
+            directionY=0;
 
-            int GhostDir = random.Next(leftBorderOfRandom, rightBorderOfRandom);
+            int GhostDirection = random.Next(MoveLeftCommand, MoveUpCommand + 1);
 
-            switch (GhostDir)
+            switch (GhostDirection)
             {
-                case FirstRandomNumber:
-                    directionX = -1;
+                case MoveLeftCommand:
+                     directionX = -1;
                     directionY = 0;
                     break;
 
-                case SecondRandomNumber:
+                case MoveRightCommand:
                     directionX = 1;
                     directionY = 0;
                     break;
 
-                case ThirdRandomNumber:
+                case MoveDownCommand:
                     directionX = 0;
                     directionY = -1;
                     break;
 
-                case FourthRandomNumber:
+                case MoveUpCommand:
                     directionX = 0;
                     directionY = 1;
                     break;
             }
+
+            return;
         }
 
         static void DrawMap(char[,] map)
@@ -217,34 +221,40 @@ namespace Pacman
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     map[i, j] = newFile[i][j];
-
+                    
                     if ((map[i, j]) == player)
                     {
-                        pacmanPositionX = i;
-                        pacmanPositionY = j;
-                        map[i, j] = reward;
+                        DrouElementMaps(ref map, i, j, ref allDots, reward, out pacmanPositionX, out pacmanPositionY);
                     }
                     else if ((map[i, j]) == firstOpponent)
                     {
-                        firstGhostPositionX = i;
-                        firstGhostPositionY = j;
-                        map[i, j] = reward;
+                        DrouElementMaps(ref map, i, j, ref allDots, reward, out firstGhostPositionX, out firstGhostPositionY);
                     }
                     else if ((map[i, j]) == secondOpponent)
                     {
-                        secondGhostPositionX = i;
-                        secondGhostPositionY = j;
-                        map[i, j] = reward;
+                        DrouElementMaps(ref map, i, j,  ref allDots, reward,out secondGhostPositionX, out secondGhostPositionY);
                     }
                     else if (map[i, j] == ' ')
                     {
-                        map[i, j] = reward;
-                        allDots++;
+                        DrouReward(ref map, i, j, ref allDots, reward);
                     }
                 }
             }
 
             return map;
+        }
+
+        static void DrouElementMaps(ref char[,] map,int coordinateX, int coordinateY, ref int allDots, char reward,out int positionX, out int positionY)
+        {
+            positionX = coordinateX;
+            positionY = coordinateY;
+            DrouReward(ref map, coordinateX, coordinateY, ref allDots, reward);
+        }
+
+        static void DrouReward(ref char[,] map, int coordinateX, int coordinateY, ref int allDots, char reward)
+        {
+            map[coordinateX, coordinateY] = reward;
+            allDots++;
         }
     }
 }
