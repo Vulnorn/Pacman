@@ -40,8 +40,7 @@ namespace Pacman
 
             while (isPlaying)
             {
-                Console.SetCursorPosition(30,0);
-                Console.Write($"Собрано {collectDots}/{allDots}");
+                ShowDotsInfo(collectDots, allDots);
 
                 if (Console.KeyAvailable)
                 {
@@ -74,6 +73,17 @@ namespace Pacman
                 }
             }
 
+            ShowGameResult(collectDots, allDots, isAlive);
+        }
+
+        static void ShowDotsInfo(int collectDots, int allDots)
+        {
+            Console.SetCursorPosition(30, 0);
+            Console.Write($"Собрано {collectDots}/{allDots}");
+        }
+
+        static void ShowGameResult(int collectDots, int allDots, bool isAlive)
+        {
             Console.SetCursorPosition(30, 1);
 
             if (collectDots == allDots)
@@ -117,7 +127,7 @@ namespace Pacman
             if (map[pacmanPositionX, pacmanPositionY] == reward)
             {
                 collectDots++;
-                map[pacmanPositionX, pacmanPositionY] = ' ';                
+                map[pacmanPositionX, pacmanPositionY] = ' ';
             }
 
             return collectDots;
@@ -161,29 +171,25 @@ namespace Pacman
             const int MoveUpCommand = 4;
 
             directionX = 0;
-            directionY=0;
+            directionY = 0;
 
             int GhostDirection = random.Next(MoveLeftCommand, MoveUpCommand + 1);
 
             switch (GhostDirection)
             {
                 case MoveLeftCommand:
-                     directionX = -1;
-                    directionY = 0;
+                    directionX = -1;
                     break;
 
                 case MoveRightCommand:
                     directionX = 1;
-                    directionY = 0;
                     break;
 
                 case MoveDownCommand:
-                    directionX = 0;
                     directionY = -1;
                     break;
 
                 case MoveUpCommand:
-                    directionX = 0;
                     directionY = 1;
                     break;
             }
@@ -221,22 +227,22 @@ namespace Pacman
                 for (int j = 0; j < map.GetLength(1); j++)
                 {
                     map[i, j] = newFile[i][j];
-                    
+
                     if ((map[i, j]) == player)
                     {
-                        DrouElementMaps(ref map, i, j, ref allDots, reward, out pacmanPositionX, out pacmanPositionY);
+                        DrawElementMaps(ref map, i, j, ref allDots, reward, out pacmanPositionX, out pacmanPositionY);
                     }
                     else if ((map[i, j]) == firstOpponent)
                     {
-                        DrouElementMaps(ref map, i, j, ref allDots, reward, out firstGhostPositionX, out firstGhostPositionY);
+                        DrawElementMaps(ref map, i, j, ref allDots, reward, out firstGhostPositionX, out firstGhostPositionY);
                     }
                     else if ((map[i, j]) == secondOpponent)
                     {
-                        DrouElementMaps(ref map, i, j,  ref allDots, reward,out secondGhostPositionX, out secondGhostPositionY);
+                        DrawElementMaps(ref map, i, j, ref allDots, reward, out secondGhostPositionX, out secondGhostPositionY);
                     }
                     else if (map[i, j] == ' ')
                     {
-                        DrouReward(ref map, i, j, ref allDots, reward);
+                        DrawReward(ref map, i, j, ref allDots, reward);
                     }
                 }
             }
@@ -244,14 +250,14 @@ namespace Pacman
             return map;
         }
 
-        static void DrouElementMaps(ref char[,] map,int coordinateX, int coordinateY, ref int allDots, char reward,out int positionX, out int positionY)
+        static void DrawElementMaps(ref char[,] map, int coordinateX, int coordinateY, ref int allDots, char reward, out int positionX, out int positionY)
         {
             positionX = coordinateX;
             positionY = coordinateY;
-            DrouReward(ref map, coordinateX, coordinateY, ref allDots, reward);
+            DrawReward(ref map, coordinateX, coordinateY, ref allDots, reward);
         }
 
-        static void DrouReward(ref char[,] map, int coordinateX, int coordinateY, ref int allDots, char reward)
+        static void DrawReward(ref char[,] map, int coordinateX, int coordinateY, ref int allDots, char reward)
         {
             map[coordinateX, coordinateY] = reward;
             allDots++;
